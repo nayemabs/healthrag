@@ -1,0 +1,19 @@
+services:
+  healthrag:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - faiss_data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+
+volumes:
+  faiss_data:

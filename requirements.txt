@@ -1,0 +1,49 @@
+# Core
+fastapi
+uvicorn[standard]
+pydantic>=2.0
+pydantic-settings>=2.0
+python-multipart
+
+# LangChain (FAISS + text splitting)
+langchain-core
+langchain-community
+langchain-text-splitters
+
+# Embeddings & Vector Store
+sentence-transformers
+faiss-cpu>=1.10.0
+
+# Language Detection
+langdetect
+
+# Translation — multiple backends (configured via TRANSLATION_BACKEND env var)
+#
+# googletrans (TRANSLATION_BACKEND=googletrans) — NOT listed here because
+# googletrans==4.0.0rc1 pins httpx<0.14, which conflicts with langchain-core/langsmith
+# that require httpx>=0.23. Install manually in an isolated env if you need it:
+#   pip install googletrans==4.0.0rc1 --no-deps
+#   # then ensure httpx>=0.23 is still present for the rest of the stack
+#
+# argostranslate: open-source offline neural MT (EN↔JA packages ~100 MB each)
+argostranslate
+deep-translator        # Google Translate via deep-translator (TRANSLATION_BACKEND=google)
+
+# LLM backends — optional, install separately (each requires an API key):
+#   pip install langchain-openai   (LLM_BACKEND=openai,  needs OPENAI_API_KEY)
+#   pip install langchain-anthropic (LLM_BACKEND=claude, needs ANTHROPIC_API_KEY)
+
+# Monitoring & Logging
+structlog
+
+# Testing
+pytest
+pytest-asyncio
+pytest-cov
+httpx
+
+# Code Quality
+ruff
+
+# Utils
+python-dotenv

@@ -1,0 +1,27 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+.coverage
+htmlcov/
+
+# Data (large files)
+data/faiss_index/
+data/*.txt
+data/*.pdf
+
+# Logs
+logs/
+
+# Env
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
