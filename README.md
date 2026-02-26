@@ -212,26 +212,71 @@ pytest tests/test_retrieval.py -v
 
 ## Docker
 
-**With Docker Compose (recommended — FAISS index persists across restarts):**
+### Option A — Pull pre-built image (fastest, no build required)
+
+Works on any machine with Docker installed (supports `linux/amd64` and `linux/arm64`).
 
 ```bash
+# 1. Get the project files (only need .env.example and docker-compose.yml)
+git clone https://github.com/nayemabs/healthrag.git
+cd healthrag
+
+# 2. Configure
+cp .env.example .env
+# Open .env and set API_KEYS to a secret of your choice (default: dev-key-healthrag)
+
+# 3. Pull and run
+docker pull ghcr.io/nayemabs/healthrag:latest
+docker run -d \
+  --name healthrag \
+  -p 8000:8000 \
+  --env-file .env \
+  -v healthrag_data:/app/data \
+  ghcr.io/nayemabs/healthrag:latest
+
+# 4. Verify
+curl http://localhost:8000/health
+# → {"status":"ok","app":"Healthcare Knowledge Assistant"}
+
+# 5. Ingest a document
+curl -X POST http://localhost:8000/ingest \
+  -H "X-API-Key: dev-key-healthrag" \
+  -F "file=@yourfile.txt"
+
+# 6. Retrieve
+curl -X POST http://localhost:8000/retrieve \
+  -H "X-API-Key: dev-key-healthrag" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "your question here", "top_k": 3}'
+
+# 7. Generate an answer
+curl -X POST http://localhost:8000/generate \
+  -H "X-API-Key: dev-key-healthrag" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "your question here"}'
+```
+
+The FAISS index is stored in the `healthrag_data` Docker named volume — it survives container
+restarts and `docker pull` upgrades. To wipe it: `docker volume rm healthrag_data`
+
+### Option B — Docker Compose (recommended for local dev)
+
+```bash
+git clone https://github.com/nayemabs/healthrag.git
+cd healthrag
 cp .env.example .env          # edit API_KEYS and other settings
 docker compose up --build
 ```
 
-The `faiss_data` named volume is created automatically. Ingested documents and the FAISS
-index survive container stops and image rebuilds as long as the volume exists.
+The `faiss_data` named volume is created automatically. To wipe the index: `docker compose down -v`
 
-To wipe the index: `docker compose down -v`
-
-**Plain Docker (ephemeral unless you mount the volume manually):**
+### Option C — Build from source
 
 ```bash
+git clone https://github.com/nayemabs/healthrag.git
+cd healthrag
 docker build -t healthrag .
-docker run -p 8000:8000 \
-  --env-file .env \
-  -v healthrag_data:/app/data \
-  healthrag
+docker run -d -p 8000:8000 --env-file .env -v healthrag_data:/app/data healthrag
 ```
 
 ---
