@@ -1,7 +1,4 @@
-"""Unit tests for generation service helpers and generate()."""
-from unittest.mock import MagicMock, call, patch
-
-import pytest
+from unittest.mock import patch
 
 from app.models.requests import GenerateRequest
 from app.services.generation import _build_context, _extract_recommendations, generate
@@ -61,7 +58,7 @@ class TestExtractRecommendations:
             "Lifestyle changes are essential. Blood pressure targets apply."
         )
         result = _extract_recommendations([doc])
-        lines = [l for l in result.split("\n") if l.strip()]
+        lines = [line for line in result.split("\n") if line.strip()]
         assert all(line.startswith("•") for line in lines)
 
     def test_at_most_three_bullets(self):

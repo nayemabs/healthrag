@@ -80,7 +80,7 @@ class ArgostranslateBackend(TranslationBackend):
             from argostranslate.translate import get_installed_languages
 
             installed = get_installed_languages()
-            source_lang = next((l for l in installed if l.code == source), None)
+            source_lang = next((lang for lang in installed if lang.code == source), None)
             if source_lang:
                 target_in_source = next(
                     (t for t in source_lang.translations_to if t.code == target), None
