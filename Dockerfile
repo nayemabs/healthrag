@@ -7,14 +7,15 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Pre-bake the embedding model (~471 MB) so cold starts don't hit the network
+# Pre-bake the embedding model (~471 MB) into /app/.cache so appuser can read it at runtime
+ENV HF_HOME=/app/.cache
 RUN python -c "\
 from sentence_transformers import SentenceTransformer; \
 SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')"
 
 COPY --chown=appuser:appuser app/ ./app/
 
-RUN mkdir -p data/faiss_index && chown -R appuser:appuser data/
+RUN mkdir -p data/faiss_index && chown -R appuser:appuser data/ /app/.cache
 
 USER appuser
 
