@@ -168,7 +168,7 @@ FastAPI (app/main.py)
               ├─► retrieval.py     retrieve top-k docs
               ├─► EN/JA template   mock LLM (swappable for real LLM)
               └─► translation.py   translate() if output_language ≠ query_language
-                    └─► deep-translator (Google) / argostranslate (offline) / mock
+                    └─► deep-translator (Google) / googletrans / argostranslate (offline) / mock
 ```
 
 **Embedding model**: `paraphrase-multilingual-MiniLM-L12-v2`
@@ -185,7 +185,7 @@ FastAPI (app/main.py)
 | `API_KEYS` | `dev-key-healthrag` | Comma-separated valid API keys |
 | `EMBEDDING_MODEL` | `paraphrase-multilingual-MiniLM-L12-v2` | HuggingFace model name |
 | `FAISS_INDEX_PATH` | `data/faiss_index` | Persistent index location |
-| `TRANSLATION_BACKEND` | `google` | `google` (internet), `argostranslate` (offline ~100 MB), or `mock` |
+| `TRANSLATION_BACKEND` | `google` | `google` (internet), `googletrans` (unofficial), `argostranslate` (offline ~100 MB), or `mock` |
 | `LLM_BACKEND` | `template` | `template` (no key), `openai` (needs `OPENAI_API_KEY`), `claude` (needs `ANTHROPIC_API_KEY`) |
 | `LLM_MODEL` | `` | Model override — defaults to `gpt-4o-mini` (openai) or `claude-sonnet-4-6` (claude) |
 | `OPENAI_API_KEY` | — | Required when `LLM_BACKEND=openai`; also `pip install langchain-openai` |
